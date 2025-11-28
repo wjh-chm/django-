@@ -1,101 +1,289 @@
-"""dj2 URL Configuration
+# coding:utf-8
+__author__ = "ila"
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 import os
-from django.contrib import admin
-from django.urls import path,include,re_path
-from django.conf.urls import url
-from django.views.static import serve
-from django.views.generic import TemplateView
+from django.urls import path
+from main import users_v, config_v, schema_v
 
+# from dj2.settings import dbName as schemaName
 
-from . import views
-from dj2.settings import dbName as schemaName
-
+# url规则列表
 urlpatterns = [
-    path('xadmin/', admin.site.urls),
-    path(r'index/',views.index),
-    re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)$', views.admin_lib2),
-    re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_lib3),
-    re_path(r'admin/lib/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_lib4),
-    re_path(r'admin/page/(?P<p1>.*)$', views.admin_page),
-    re_path(r'admin/page/(?P<p1>.*)/(?P<p2>.*)$', views.admin_page2),
-    re_path(r'admin/pages/(?P<p1>.*)$', views.admin_pages),
-    re_path(r'admin/pages/(?P<p1>.*)/(?P<p2>.*)$', views.admin_pages2),
-    
-    re_path(r'front/(?P<p1>.*)$', views.schema_front1),
-    re_path(r'front/(?P<p1>.*)/(?P<p2>.*)$', views.schema_front2),
-    re_path(r'front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.schema_front3),
-    re_path(r'front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.schema_front4),
-    re_path(r'{}/front/(?P<p1>.*)$'.format(schemaName), views.schema_front1),
-    re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)$'.format(schemaName), views.schema_front2),
-    re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$'.format(schemaName), views.schema_front3),
-    re_path(r'{}/front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$'.format(schemaName), views.schema_front4),
-    # re_path(r'assets/(?P<p1>.*)$', views.assets1),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)$',  views.assets2),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$',  views.assets3),
-    # re_path(r'assets/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$',  views.assets4),
-    #re_path(r'admin/(?P<p1>.*)$', views.admin_file1),
-    re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)$', views.admin_file2),
-    re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.admin_file3),
-    re_path(r'admin/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$', views.admin_file4),
-    re_path(r'layui/(?P<p1>.*)$', views.layui1),
-    re_path(r'layui/(?P<p1>.*)/(?P<p2>.*)$',  views.layui2),
-    re_path(r'layui/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$',  views.layui3),
-    re_path(r'layui/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)/(?P<p4>.*)$',  views.layui4),
-    re_path(r'pages/(?P<p1>.*)$', views.front_pages),
-    re_path(r'pages/(?P<p1>.*)/(?P<p2>.*)$',  views.front_pages2),
-    # re_path(r'pages/(?P<p1>.*)$',  views.front_file1),
-    # re_path(r'(?P<p1>css|jss|img|image|iamges|font|fonts)/(?P<p2>.*)$', views.front_file2),
-    re_path(r'modules/(?P<p1>.*)$', views.front_modules),
-    re_path(r'css/(?P<p1>.*)$', views.css1),
-    re_path(r'js/(?P<p1>.*)$', views.js1),
-    re_path(r'img/(?P<p1>.*)$', views.img1),
-    path(r'test/<str:p1>/',views.test),
-    path(r'null',views.null),
-    path('{}/'.format(schemaName),include('main.urls')),#导入schemaName
+    path(r'users/register', users_v.users_register),
+    path(r'users/login', users_v.users_login),
+    path(r'users/logout', users_v.users_logout),
+    path(r'users/session', users_v.users_session),
+    path(r'users/page', users_v.users_page),
+    path(r'users/save', users_v.users_save),
+    path(r'users/info/<id_>', users_v.users_info),
+    path(r'users/update', users_v.users_update),
+    path(r'users/delete', users_v.users_delete),
+
+    path(r'config/page', config_v.config_page),
+    path(r'config/list', config_v.config_list),
+    path(r'config/save', config_v.config_save),
+    path(r'config/add', config_v.config_add),
+    path(r'config/info/<id_>', config_v.config_info),
+    path(r'config/detail/<id_>', config_v.config_detail),
+    path(r'config/update', config_v.config_update),
+    path(r'config/delete', config_v.config_delete),
+
+]
+# main app的路径
+mainDir = os.path.join(os.getcwd(), "main")
+
+# 过滤文件的列表
+excludeList = [
+    "schema_v.py",
+    "users_v.py",
+    "config_v.py",
 ]
 
-#判断admin使用vue还是jquery
-if os.path.isdir(os.path.join(os.getcwd(),"templates/front/admin/dist/")):
-    urlpatterns.extend([
-        path(r'{}/admin/dist/index.html'.format(schemaName),
-             TemplateView.as_view(template_name='front/admin/dist/index.html')),
-        path(r'{}/admin/'.format(schemaName), TemplateView.as_view(template_name='front/admin/dist/index.html')),
-        # 以下是后台admin的url匹配规则
-        path(r'admin/dist/index.html'.format(schemaName),
-             TemplateView.as_view(template_name='front/admin/dist/index.html')),
-        path(r'admin/', TemplateView.as_view(template_name='front/admin/dist/index.html')),
-    ])
-else:
-    urlpatterns.extend([
-        path(r'{}/admin/index.html'.format(schemaName),
-             TemplateView.as_view(template_name='front/admin/index.html')),
-        path(r'{}/admin/'.format(schemaName), TemplateView.as_view(template_name='front/admin/index.html')),
-        # 以下是后台admin的url匹配规则
-        path(r'admin/index.html'.format(schemaName),
-             TemplateView.as_view(template_name='front/admin/index.html')),
-        path(r'admin/', TemplateView.as_view(template_name='front/admin/index.html')),
+# 循环当前目录下的py文件
 
-    ])
+view_tuple = set()
+for i in os.listdir(mainDir):
+    if i not in excludeList and i[-5:] == "_v.py":
+        viewName = i[:-3]  # 去掉.py后缀字符串
+        view_tuple.add("from main import {}".format(viewName))
+
+# 组合成import字符串
+import_str = '\n'.join(view_tuple)
+# print(import_str)
+exec(import_str)
+
+for i in os.listdir(mainDir):
+    if i not in excludeList and i[-5:] == "_v.py":
+        tableName = i[:-5]
+        tableName = tableName.replace(" ", "").strip()
+        print("tableName============>", tableName, len(tableName))
+
+        urlpatterns.extend(
+            [
+                path(r'{}/register'.format(tableName.lower()),
+                     eval("{}_v.{}_register".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/login'.format(tableName.lower()),
+                     eval("{}_v.{}_login".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/logout'.format(tableName.lower()),
+                     eval("{}_v.{}_logout".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/resetPass'.format(tableName.lower()),
+                     eval("{}_v.{}_resetPass".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/session'.format(tableName.lower()),
+                     eval("{}_v.{}_session".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/default'.format(tableName.lower()),
+                     eval("{}_v.{}_default".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/page'.format(tableName.lower()),
+                     eval("{}_v.{}_page".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/autoSort'.format(tableName.lower()),
+                     eval("{}_v.{}_autoSort".format(tableName.capitalize(), tableName.lower()))),
+
+                path(r'{}/save'.format(tableName.lower()),
+                     eval("{}_v.{}_save".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/add'.format(tableName.lower()),
+                     eval("{}_v.{}_add".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/thumbsup/<id_>'.format(tableName.lower()),
+                     eval("{}_v.{}_thumbsup".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/info/<id_>'.format(tableName.lower()),
+                     eval("{}_v.{}_info".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/detail/<id_>'.format(tableName.lower()),
+                     eval("{}_v.{}_detail".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/update'.format(tableName.lower()),
+                     eval("{}_v.{}_update".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/delete'.format(tableName.lower()),
+                     eval("{}_v.{}_delete".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/vote/<id_>'.format(tableName.lower()),
+                     eval("{}_v.{}_vote".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/importExcel'.format(tableName.lower()),
+                     eval("{}_v.{}_importExcel".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/sendemail'.format(tableName.lower()),
+                     eval("{}_v.{}_sendemail".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/autoSort2'.format(tableName.lower()),
+                     eval("{}_v.{}_autoSort2".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/value/<xColumnName>/<yColumnName>/<timeStatType>'.format(tableName.lower()),
+                     eval("{}_v.{}_value".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/value/<xColumnName>/<yColumnName>'.format(tableName.lower()),
+                     eval("{}_v.{}_o_value".format(tableName.capitalize(), tableName.lower()))),
+                path(r'{}/group/<columnName>'.format(tableName.lower()),
+                     eval("{}_v.{}_group".format(tableName.capitalize(), tableName.lower()))),
+            ]
+        )
+        #沙箱接口
+
+        
+
+        if tableName.lower() == "yonghu":
+            urlpatterns.extend(
+                [
+                    path(r'{}/sectionStat/nianling'.format(tableName.lower()),
+                         eval("{}_v.{}_sectionStat_nianling".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
 
 
-if os.path.isfile(os.path.join(os.getcwd(),"templates/front/index.html")):
-    urlpatterns.extend([
-    path(r'index.html', TemplateView.as_view(template_name='front/index.html')),
-     path(r'{}/index.html'.format(schemaName), TemplateView.as_view(template_name='front/index.html')),
-     path(r'{}/front/index.html'.format(schemaName), TemplateView.as_view(template_name='front/index.html')),
-    path(r'', TemplateView.as_view(template_name='front/index.html')),
-    ])
+        if tableName.lower() == "yonghu":
+            urlpatterns.extend(
+                [
+                    path(r'{}/count'.format(tableName.lower()),
+                         eval("{}_v.{}_count".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+
+        
+
+
+
+        if tableName.lower() == "fanjuleixing":
+            urlpatterns.extend(
+                [
+                    path(r'{}/count'.format(tableName.lower()),
+                         eval("{}_v.{}_count".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+
+        
+
+
+
+        if tableName.lower() == "remenfanju":
+            urlpatterns.extend(
+                [
+                    path(r'{}/count'.format(tableName.lower()),
+                         eval("{}_v.{}_count".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+        if tableName.lower() == "remenfanju":
+            urlpatterns.extend(
+                [
+                    path(r'{}/updateBrowseDuration/<id_>'.format(tableName.lower()),
+                         eval("{}_v.{}_updateBrowseDuration".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+
+        
+
+        if tableName.lower() == "panjuxinxi":
+            urlpatterns.extend(
+                [
+                    path(r'{}/sectionStat/pingfen'.format(tableName.lower()),
+                         eval("{}_v.{}_sectionStat_pingfen".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+        if tableName.lower() == "panjuxinxi":
+            urlpatterns.extend(
+                [
+                    path(r'{}/sectionStat/bofangliang'.format(tableName.lower()),
+                         eval("{}_v.{}_sectionStat_bofangliang".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+        if tableName.lower() == "panjuxinxi":
+            urlpatterns.extend(
+                [
+                    path(r'{}/sectionStat/danmu'.format(tableName.lower()),
+                         eval("{}_v.{}_sectionStat_danmu".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+        if tableName.lower() == "panjuxinxi":
+            urlpatterns.extend(
+                [
+                    path(r'{}/sectionStat/pfrs'.format(tableName.lower()),
+                         eval("{}_v.{}_sectionStat_pfrs".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+
+        if tableName.lower() == "panjuxinxi":
+            urlpatterns.extend(
+                [
+                    path(r'{}/count'.format(tableName.lower()),
+                         eval("{}_v.{}_count".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        # examrecord特定接口
+        if tableName.lower() == "examrecord":
+            urlpatterns.extend(
+                [
+                    path(r'{}/groupby'.format(tableName.lower()),
+                         eval("{}_v.{}_groupby".format(tableName.capitalize(), tableName.lower()))),
+                    path(r'{}/deleteRecords'.format(tableName.lower()),
+                         eval("{}_v.{}_deleterecords".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
+        # forum特定接口
+        if tableName.lower() == "forum":
+            urlpatterns.extend(
+                [
+                    path(r'{}/flist'.format(tableName.lower()),
+                         eval("{}_v.{}_flist".format(tableName.capitalize(), tableName.lower()))),
+                    path(r'{}/list/<id_>'.format(tableName.lower()),
+                         eval("{}_v.{}_list_id".format(tableName.capitalize(), tableName.lower()))),
+                    path(r'{}/list'.format(tableName.lower()),
+                         eval("{}_v.{}_list".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+        else:
+            urlpatterns.extend(
+                [
+                    path(r'{}/list'.format(tableName.lower()),
+                         eval("{}_v.{}_list".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+urlpatterns.extend(
+    [
+        path(r'cal/<str:tableName>/<str:columnName>', schema_v.schemaName_cal),
+        path(r'file/download', schema_v.schemaName_file_download),
+        path(r'file/upload', schema_v.schemaName_file_upload),
+        path(r'follow/<tableName>/<columnName>/<level>/<parent>', schema_v.schemaName_follow_level),
+        path(r'follow/<tableName>/<columnName>', schema_v.schemaName_follow),
+        path(r'location', schema_v.schemaName_location),
+        path(r'matchFace', schema_v.schemaName_matchface),
+        path(r'option/<tableName>/<columnName>', schema_v.schemaName_option),
+        path(r'remind/<tableName>/<columnName>/<type>', schema_v.schemaName_remind_tablename_columnname_type),
+        # 前台提醒接口（通用接口，不需要登陆）
+        path(r'<tableName>/remind/<columnName>/<type>', schema_v.schemaName_tablename_remind_columnname_type),
+        # 后台提醒接口 (每个表的单独接口，需登录)
+        path(r'sh/<tableName>', schema_v.schemaName_sh),
+        path(r'upload/<fileName>', schema_v.schemaName_upload),
+        path(r'group/<tableName>/<columnName>', schema_v.schemaName_group_quyu),
+        path(r'value/<tableName>/<xColumnName>/<yColumnName>', schema_v.schemaName_value_quyu),
+        path(r'value/<tableName>/<xColumnName>/<yColumnName>/<timeStatType>', schema_v.schemaName_value_riqitj),
+        path(r'spider/<tableName>', schema_v.schemaName_spider),
+    ]
+)
+
+# print(urlpatterns)

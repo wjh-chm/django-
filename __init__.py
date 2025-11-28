@@ -1,2 +1,1 @@
-#coding:utf-8
-__author__ = "ila"
+default_app_config = 'main.apps.MainConfig'
